@@ -19,27 +19,35 @@ let allProducts = [];
 // ===================================
 
 async function getProducts() {
-
     try {
-
         const response = await fetch("https://fakestoreapi.com/products");
 
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+
         const products = await response.json();
+
+        console.log("Products loaded:", products);
 
         allProducts = products;
 
         displayProducts(allProducts);
-
         loadCategories(allProducts);
 
     } catch (error) {
+        console.error("Product loading error:", error);
 
-        console.log(error);
-
+        productsList.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger text-center">
+                    <h4>Unable to load products</h4>
+                    <p>Please try again later.</p>
+                </div>
+            </div>
+        `;
     }
-
 }
-
 // ===================================
 // Display Products
 // ===================================
